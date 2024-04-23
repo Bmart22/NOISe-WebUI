@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Whole-slide Inference{% endblock %}</h1>
+  {% if g.user %}
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+
+<form method="post" enctype=multipart/form-data>
+
+    <label for="image">Choose an image:</label>
+    <input type="file" id="image" name="image" accept="image/png, image/jpeg, image/tif, .tif"/>
+    <div class="view"> </div>
+    <input type="submit" value="Save">
+</form>
+
+<img src="" id="input_display"> </img>
+
+<a href= {{ url_for("interface.results") }} class='btn btn-primary'> Inference </a>
+
+
+<script>
+    var img = document.getElementById("input_display");
+    
+    // If image has been uploaded, display it
+    if ({{image_exists}}==1) {
+        img.src = "{{ url_for('interface.loadImage') }}";
+        
+        // Large tif files may take awhile to load, don't change dimensions until they're available
+        img.onload = () => {
+            var w = img.width;
+            var h = img.height;
+            if ( w > window.innerWidth ) {
+                w = window.innerWidth;
+                h = img.height * (window.innerWidth/img.width);
+            } if ( h > window.innerHeight ) {
+                h = window.innerHeight;
+                w = img.width * (window.innerHeight/img.height);
+            }
+            img.width = w;
+            img.height = h;
+        }
+        
+    }
+    
+    
+    
+    
+    
+    
+</script>
+
+
+{% endblock %}
+
+

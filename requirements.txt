@@ -1,0 +1,14 @@
+name: env_recreate
+channels:
+  - defaults
+  - conda-forge
+  - pytorch
+dependencies:
+  - conda-forge::flask
+  - conda-forge::nodejs
+  - git
+  - make
+  - ultralytics
+  - pytorch::pytorch
+  - pytorch::torchvision
+prefix: /Users/brendancs/miniconda3/envs/env_recreate

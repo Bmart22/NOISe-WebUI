@@ -4,7 +4,6 @@
 
 import os, sys
 #import numpy as np
-#from PIL import Image
 from ultralytics import YOLO
 import csv
 from PIL import Image, ImageDraw
@@ -287,20 +286,26 @@ def inference(model, idx, img, size, out_dir):
         for i in range(len(box_results)):
             writer.writerow( box_results[i].tolist() + mask_results[i].flatten().tolist() )
     
-    # Draw boxes on original image
-    img1 = ImageDraw.Draw(img, 'RGBA')
+    # Draw boxes/masks on original image
+    img_rect = Image.new('RGBA', img.size)
+    img_rect_draw = ImageDraw.Draw(img_rect)
+    img_mask = Image.new('RGBA', img.size)
+    img_mask_draw = ImageDraw.Draw(img_mask)
+#    img1 = ImageDraw.Draw(img, 'RGBA')
     
     for i, box in enumerate(box_results):
         box = box[:4].type(torch.int)
         shape = [(box[0], box[1]), (box[2], box[3])]
-        img1.rectangle(shape, outline="green", width=3)
+        img_rect_draw.rectangle(shape, outline="green", width=3)
 #        print(mask_results[i].astype(int).flatten().tolist())
         mask = mask_results[i].astype(int).flatten().tolist()
         if len(mask) >= 6:
             color = (randint(0,255),randint(0,255),randint(0,255))
-            img1.polygon(mask, fill=color+(125,), outline="blue")
+            img_mask_draw.polygon(mask, fill=color+(125,), outline="blue")
             
     img.save( "{f}/unpatch.png".format(f=out_dir) )
+    img_rect.save( "{f}/unpatch_boxes.png".format(f=out_dir) )
+    img_mask.save( "{f}/unpatch_masks.png".format(f=out_dir) )
     
     if objects_found:
         return [{"boxes":box_results[:,:4], "scores":box_results[:,4], "labels":box_results[:,5].int()}]

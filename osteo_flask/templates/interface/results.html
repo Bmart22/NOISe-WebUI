@@ -3,27 +3,40 @@
 {% block header %}
   <h1>{% block title %}Results{% endblock %}</h1>
   {% if g.user %}
-<!--    {#<a class="action" href="{{ url_for('blog.create') }}">New</a>#}-->
   {% endif %}
 {% endblock %}
 
 {% block content %}
 
-<!--<form method="post" enctype=multipart/form-data>-->
+<!--Toggle boxes-->
+<div class="form-check">
+  <input class="form-check-input" type="checkbox" value="" id="box_check" checked onchange="box_checker(this.checked)">
+  <label class="form-check-label" for="box_check">
+    Bounding Boxes
+  </label>
+</div>
+<div class="form-check">
+  <input class="form-check-input" type="checkbox" value="" id="mask_check" checked onchange="mask_checker(this.checked)">
+  <label class="form-check-label" for="mask_check">
+    Masks
+  </label>
+</div>
 
-<!--    <label for="image">Choose an input:</label>-->
-<!--    <input type="file" id="image" name="image" accept="image/png, image/jpeg"/>-->
-<!--    <div class="view"> </div>-->
-<!--    <input type="submit" value="Save">-->
-<!--</form>-->
-
-<img src="" id="input_display"> </img>
-
+<!--Image display-->
+<div class="display">
+    <img src="" id="input_display"> </img>
+    <img src="" id="box_display"> </img>
+    <img src="" id="mask_display"> </img>
+</div>
 
 <script>
     var img = document.getElementById("input_display");
+    var box = document.getElementById("box_display");
+    var mask = document.getElementById("mask_display");
     
     img.src = "{{ url_for('interface.loadOutputImage') }}";
+    box.src = "{{ url_for('interface.loadBoxImage') }}";
+    mask.src = "{{ url_for('interface.loadMaskImage') }}";
     
     // Large files may take awhile to load, don't change dimensions until they're available
     img.onload = () => {
@@ -38,8 +51,31 @@
         }
         img.width = w;
         img.height = h;
-    }
         
+        box.width = w;
+        box.height = h;
+        
+        mask.width = w;
+        mask.height = h;
+    }
+    
+    // Toggle the bounding boxes and masks on/off when a checkbox is changed
+    function box_checker(checked) {
+        checked ? showImage("box_display") : hideImage("box_display");
+    }
+    function mask_checker(checked) {
+        checked ? showImage("mask_display") : hideImage("mask_display");
+    }
+    
+    // Change the view state of a given image
+    function hideImage(id) {
+        var im = document.getElementById(id);
+        im.style.visibility = 'hidden';
+    }
+    function showImage(id) {
+        var im = document.getElementById(id);
+        im.style.visibility = 'visible';
+    }
     
     
     

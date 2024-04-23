@@ -37,10 +37,16 @@ def results():
 
 @bp.route('/src_image', methods=('GET', 'POST'))
 def loadImage():
-    print(current_app.config['UPLOAD_FOLDER'])
     return send_from_directory( current_app.config['UPLOAD_FOLDER'], "submit.png" )
 
 @bp.route('/out_image', methods=('GET', 'POST'))
 def loadOutputImage():
-    print(current_app.config['UPLOAD_FOLDER'])
     return send_from_directory( os.path.join(current_app.config['UPLOAD_FOLDER'],"output"), "unpatch.png" )
+    
+@bp.route('/box_image', methods=('GET', 'POST'))
+def loadBoxImage():
+    return send_from_directory( os.path.join(current_app.config['UPLOAD_FOLDER'],"output"), "unpatch_boxes.png" )
+    
+@bp.route('/mask_image', methods=('GET', 'POST'))
+def loadMaskImage():
+    return send_from_directory( os.path.join(current_app.config['UPLOAD_FOLDER'],"output"), "unpatch_masks.png" )

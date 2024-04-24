@@ -215,8 +215,8 @@ def inference(model, idx, img, size, out_dir):
     mask_results = []
 #    for y0 in range(0, img.size[1], size//2)[:2]:
 #        for x0 in range(0, img.size[0], size//2)[:2]:
-    for y0 in range(0, img.size[1], size//2)[:4]:
-        for x0 in range(0, img.size[0], size//2)[:4]:
+    for y0 in range(0, img.size[1], size//2):
+        for x0 in range(0, img.size[0], size//2):
             x1, y1 = x0+size, y0+size
 #            if x1 >= img.size[0]:
 #                x0, x1 = img.size[0]-size, img.size[0]-1
@@ -228,7 +228,7 @@ def inference(model, idx, img, size, out_dir):
             yc=math.ceil(y0/(size//2))
             xc=math.ceil(x0/(size//2))
 #            img_crop.save("{f}/img_{id}_{yc}_{xc}.png".format(f=out_dir, id=idx, yc=yc, xc=xc))
-            results = model( img_crop )
+            results = model( img_crop, verbose=False )
             img_ind = np.array((xc,yc))
             
             print(img_crop)
